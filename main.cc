@@ -1,4 +1,4 @@
-x 4 #include "DHT.h"
+#include "DHT.h"
 
 // --- CONFIGURAÇÃO DO SENSOR DHT22 ---
 #define DHTPIN 13
@@ -13,7 +13,7 @@ void setup() {
 
   // Inicializa sensores
   dht.begin();
-  analogReadResolution(12);
+  analogReadResolution(12); // ESP32: leitura de 0 a 4095
 
   Serial.println("Sensores DHT22 e LDR iniciados.");
 }
@@ -21,12 +21,18 @@ void setup() {
 void loop() {
   // --- LEITURA DA TEMPERATURA ---
   float temperatura = dht.readTemperature();
-  if (isnan(temperatura)) {
+  float umidade = dht.readHumidity();
+
+  if (isnan(temperatura) || isnan(umidade)) {
     Serial.println("Falha ao ler do sensor DHT!");
   } else {
     Serial.print("Temperatura: ");
     Serial.print(temperatura);
     Serial.println(" °C");
+
+    Serial.print("Umidade: ");
+    Serial.print(umidade);
+    Serial.println(" %");
   }
 
   // --- LEITURA DA LUMINOSIDADE ---
